@@ -1,0 +1,25 @@
+
+[versions]
+kotlin-version = "2.0.21"
+exposed-version = "0.60.0"
+kotlinx-serialization-version = "1.8.0-RC"
+
+[libraries]
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-version" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed-version" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed-version" }
+exposed-spring-boot-starter = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed-version" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-version" }
+
+# databases
+db-connector-mariadb = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.3.1" }
+db-connector-mysql = { module = "mysql:mysql-connector-java", version = "8.0.33" }
+db-connector-postgres = { module = "org.postgresql:postgresql", version = "42.7.2" }
+db-connector-sqlite = { module = "org.xerial:sqlite-jdbc", version = "3.44.1.0" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin-version" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+spring-boot = { id = "org.springframework.boot", version = "3.4.1" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
