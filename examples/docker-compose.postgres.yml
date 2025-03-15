@@ -1,0 +1,25 @@
+services:
+  links-api:
+    image: mcarr823/links-api:latest
+    container_name: links-api
+    restart: 'unless-stopped'
+    environment:
+      - DB_TYPE=POSTGRES
+      - DB_HOST=db
+      - DB_PORT=12345
+      - DB_NAME=linksdb
+      - DB_USER=linksuser
+      - DB_PASS=linksdbpassword
+    ports:
+      - 8080:8080
+
+  db:
+    image: postgres:17
+    environment:
+
+      POSTGRES_DB: linksdb
+      POSTGRES_USER: linksuser
+      POSTGRES_PASSWORD: linksdbpassword
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+

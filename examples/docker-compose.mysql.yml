@@ -1,0 +1,26 @@
+services:
+  links-api:
+    image: mcarr823/links-api:latest
+    container_name: links-api
+    restart: 'unless-stopped'
+    environment:
+      - DB_TYPE=MYSQL
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=linksdb
+      - DB_USER=linksuser
+      - DB_PASS=linksdbpassword
+    ports:
+      - 8080:8080
+
+  db:
+    image: mysql:lts
+    environment:
+      MYSQL_ROOT_PASSWORD: someSecurePassword
+      MYSQL_DATABASE: linksdb
+      MYSQL_USER: linksuser
+      MYSQL_PASSWORD: linksdbpassword
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+
+

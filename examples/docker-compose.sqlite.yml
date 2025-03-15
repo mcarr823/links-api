@@ -1,0 +1,14 @@
+services:
+  links-api:
+    image: mcarr823/links-api:latest
+    container_name: links-api
+
+    # Only used for SQLite
+    volumes:
+      - ./links.db:/app/data.db
+
+    restart: 'unless-stopped'
+    environment:
+      - DB_TYPE=SQLITE
+    ports:
+      - 8080:8080

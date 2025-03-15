@@ -1,0 +1,9 @@
+services:
+  links-api:
+    image: mcarr823/links-api:latest
+    container_name: links-api
+    restart: 'unless-stopped'
+    environment:
+      - DB_TYPE=MEMORY
+    ports:
+      - 8080:8080

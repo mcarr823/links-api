@@ -1,0 +1,25 @@
+services:
+  links-api:
+    image: mcarr823/links-api:latest
+    container_name: links-api
+    restart: 'unless-stopped'
+    environment:
+      - DB_TYPE=MARIADB
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=linksdb
+      - DB_USER=linksuser
+      - DB_PASS=linksdbpassword
+    ports:
+      - 8080:8080
+
+  db:
+    image: mariadb:lts
+    environment:
+      MARIADB_ROOT_PASSWORD: someSecurePassword
+      MARIADB_DATABASE: linksdb
+      MARIADB_USER: linksuser
+      MARIADB_PASSWORD: linksdbpassword
+    volumes:
+      - ./mariadb-data:/var/lib/mysql
+
