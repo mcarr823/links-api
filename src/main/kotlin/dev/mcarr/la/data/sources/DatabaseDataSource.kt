@@ -1,10 +1,9 @@
 package dev.mcarr.la.data.sources
 
 import dev.mcarr.la.classes.LinkGroup
-import dev.mcarr.la.classes.LinkGroupArray
-import dev.mcarr.la.interfaces.IDataSource
 import dev.mcarr.la.data.daos.LinkDao
 import dev.mcarr.la.data.daos.LinkGroupDao
+import dev.mcarr.la.interfaces.IDataSource
 import org.springframework.transaction.annotation.Transactional
 
 /**

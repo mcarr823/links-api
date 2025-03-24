@@ -1,9 +1,7 @@
 package dev.mcarr.la.routes.imports
 
 import dev.mcarr.la.classes.LinkGroupArray
-import dev.mcarr.la.data.enums.ExportFormat
 import dev.mcarr.la.data.enums.ImportFormat
-import dev.mcarr.la.data.request.ExportRequest
 import dev.mcarr.la.data.request.ImportRequest
 import dev.mcarr.la.routes.AbstractRoute
 import org.springframework.web.bind.annotation.PutMapping

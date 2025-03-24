@@ -1,8 +1,6 @@
 package dev.mcarr.la.routes.group
 
 import dev.mcarr.la.classes.LinkGroup
-import dev.mcarr.la.data.enums.ImportFormat
-import dev.mcarr.la.data.request.ImportRequest
 import dev.mcarr.la.data.request.LinkGroupRequest
 import dev.mcarr.la.data.response.LinkGroupResponse
 import dev.mcarr.la.routes.AbstractRoute
@@ -32,7 +30,6 @@ class LinkGroupRoute : AbstractRoute() {
      * @return An InsertResponse object containing the
      * ID of the inserted LinkGroup
      *
-     * @see LinkGroup
      * @see LinkGroupRequest.Create
      * @see dev.mcarr.la.data.response.InsertResponse
      * */
@@ -58,7 +55,6 @@ class LinkGroupRoute : AbstractRoute() {
      * @throws Exception If the specified LinkGroup could
      * not be found
      *
-     * @see LinkGroup
      * @see LinkGroupRequest.Read
      * @see dev.mcarr.la.data.response.LinkGroupResponse
      * */
@@ -83,7 +79,6 @@ class LinkGroupRoute : AbstractRoute() {
      * @throws Exception If the specified LinkGroup could
      * not be updated
      *
-     * @see LinkGroup
      * @see LinkGroupRequest.Update
      * @see dev.mcarr.la.data.response.BooleanResponse
      * */
@@ -108,7 +103,6 @@ class LinkGroupRoute : AbstractRoute() {
      * @throws Exception If the specified LinkGroup could
      * not be deleted
      *
-     * @see LinkGroup
      * @see LinkGroupRequest.Delete
      * @see dev.mcarr.la.data.response.BooleanResponse
      * */

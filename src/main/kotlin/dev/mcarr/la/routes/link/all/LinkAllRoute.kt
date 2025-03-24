@@ -1,12 +1,12 @@
 package dev.mcarr.la.routes.link.all
 
-import dev.mcarr.la.classes.LinkGroup
 import dev.mcarr.la.data.daos.LinkDao
-import dev.mcarr.la.data.request.LinkRequest
 import dev.mcarr.la.data.response.LinkMultiResponse
-import dev.mcarr.la.data.response.LinkResponse
 import dev.mcarr.la.routes.AbstractRoute
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 /**
  * /link/all endpoint.
@@ -29,7 +29,7 @@ class LinkAllRoute : AbstractRoute() {
      * @return A LinkMultiResponse object containing
      * all of the links
      *
-     * @see Link
+     * @see dev.mcarr.la.classes.Link
      * @see dev.mcarr.la.data.response.LinkMultiResponse
      * */
     @PostMapping
@@ -46,7 +46,7 @@ class LinkAllRoute : AbstractRoute() {
      * @return A BooleanResponse object containing the success
      * status of the delete operation
      *
-     * @see Link
+     * @see dev.mcarr.la.classes.Link
      * @see dev.mcarr.la.data.response.BooleanResponse
      * */
     @DeleteMapping

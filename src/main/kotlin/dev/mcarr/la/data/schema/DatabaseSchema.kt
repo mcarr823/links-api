@@ -1,6 +1,5 @@
 package dev.mcarr.la.data.schema
 
-import dev.mcarr.la.classes.LinkGroup
 import dev.mcarr.la.data.tables.LinkGroupTable
 import dev.mcarr.la.data.tables.LinkTable
 import org.jetbrains.exposed.sql.SchemaUtils

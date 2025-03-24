@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
  * This is so that we can test what will happen if the
  * server receives an unexpected value from the client.
  *
- * @param String representation of an import or export
+ * @param format String representation of an import or export
  * format
  *
  * @see dev.mcarr.la.data.enums.ExportFormat

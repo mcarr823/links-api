@@ -3,7 +3,6 @@ package dev.mcarr.la.routes
 import dev.mcarr.la.data.response.*
 import dev.mcarr.la.data.sources.DatabaseDataSource
 import dev.mcarr.la.interfaces.IDataSource
-import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.http.HttpHeaders
@@ -36,7 +35,7 @@ abstract class AbstractRoute {
      *
      * @see ErrorResponse
      * */
-    fun error(e: Exception): ResponseEntity<ErrorResponse> {
+    private fun error(e: Exception): ResponseEntity<ErrorResponse> {
         val err = e.message ?: "Request failed"
         val resp = ErrorResponse(err)
         return ResponseEntity.internalServerError().body(resp)

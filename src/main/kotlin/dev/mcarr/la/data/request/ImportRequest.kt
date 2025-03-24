@@ -1,6 +1,5 @@
 package dev.mcarr.la.data.request
 
-import dev.mcarr.la.data.enums.ExportFormat
 import dev.mcarr.la.data.enums.ImportFormat
 import kotlinx.serialization.Serializable
 

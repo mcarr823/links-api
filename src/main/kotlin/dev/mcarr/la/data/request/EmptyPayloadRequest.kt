@@ -11,4 +11,4 @@ import kotlinx.serialization.Serializable
  * need any data in order to perform a request.
  * */
 @Serializable
-class EmptyPayloadRequest() : IRequest
+class EmptyPayloadRequest : IRequest

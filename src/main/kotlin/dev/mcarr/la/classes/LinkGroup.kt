@@ -28,7 +28,7 @@ class LinkGroup(
      * @return Newline-delimited string of links in the Onetab format
      */
     fun exportOnetab(): String =
-        links.map(Link::exportOnetab).joinToString("\n")
+        links.joinToString("\n", transform = Link::exportOnetab)
 
     /**
      * Creates a clone of the LinkGroup object with the provided

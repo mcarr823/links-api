@@ -1,18 +1,10 @@
 package dev.mcarr.la.routes.link
 
-import dev.mcarr.la.classes.LinkGroup
 import dev.mcarr.la.data.daos.LinkDao
-import dev.mcarr.la.data.request.LinkGroupRequest
 import dev.mcarr.la.data.request.LinkRequest
 import dev.mcarr.la.data.response.LinkResponse
 import dev.mcarr.la.routes.AbstractRoute
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 /**
  * /link endpoint.
@@ -38,7 +30,6 @@ class LinkRoute : AbstractRoute() {
      * @return An InsertResponse object containing the
      * ID of the inserted Link
      *
-     * @see Link
      * @see LinkRequest.Create
      * @see dev.mcarr.la.data.response.InsertResponse
      * */
@@ -63,7 +54,6 @@ class LinkRoute : AbstractRoute() {
      * @throws Exception If the specified Link could
      * not be found
      *
-     * @see Link
      * @see LinkRequest.Read
      * @see dev.mcarr.la.data.response.LinkResponse
      * */
@@ -88,7 +78,6 @@ class LinkRoute : AbstractRoute() {
      * @throws Exception If the specified Link could
      * not be updated
      *
-     * @see Link
      * @see LinkRequest.Update
      * @see dev.mcarr.la.data.response.BooleanResponse
      * */
@@ -113,7 +102,6 @@ class LinkRoute : AbstractRoute() {
      * @throws Exception If the specified Link could
      * not be deleted
      *
-     * @see Link
      * @see LinkRequest.Delete
      * @see dev.mcarr.la.data.response.BooleanResponse
      * */

@@ -74,7 +74,7 @@ object LinkGroupDao {
     @Throws(Exception::class)
     fun update(linkGroup: LinkGroup): Boolean {
         val updatedCount = LinkGroupTable.update({ LinkGroupTable.id eq linkGroup.id }) {
-            it[LinkGroupTable.name] = linkGroup.name
+            it[name] = linkGroup.name
         }
         return updatedCount == 1
     }

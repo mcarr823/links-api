@@ -1,7 +1,6 @@
 package dev.mcarr.la.interfaces
 
 import dev.mcarr.la.classes.LinkGroup
-import dev.mcarr.la.classes.LinkGroupArray
 
 /**
  * Represents a source of data from which this application

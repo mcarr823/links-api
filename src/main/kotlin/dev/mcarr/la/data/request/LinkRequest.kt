@@ -26,7 +26,7 @@ class LinkRequest {
      * Request to read a Link from the database
      * based on its ID.
      *
-     * @param id ID of the link to read.
+     * @param linkId ID of the link to read.
      * */
     @Serializable
     data class Read(

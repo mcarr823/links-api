@@ -1,7 +1,6 @@
 package dev.mcarr.la.data.tables
 
 import dev.mcarr.la.classes.Link
-import dev.mcarr.la.classes.LinkGroup
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table

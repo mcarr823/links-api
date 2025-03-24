@@ -35,9 +35,7 @@ class LinkGroupArray(
      * in the Onetab format
      */
     fun exportOnetab(): String =
-        groups
-            .map(LinkGroup::exportOnetab)
-            .joinToString("\n\n")
+        groups.joinToString("\n\n", transform = LinkGroup::exportOnetab)
 
     /**
      * Converts this object into JSON format.
