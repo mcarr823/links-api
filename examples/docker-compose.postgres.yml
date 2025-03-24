@@ -12,6 +12,12 @@ services:
       - DB_PASS=linksdbpassword
     ports:
       - 8080:8080
+    healthcheck:
+      test: ["CMD", "curl", "-X", "POST", "http://localhost:8080/health"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   db:
     image: postgres:17

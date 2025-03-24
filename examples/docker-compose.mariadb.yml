@@ -12,6 +12,15 @@ services:
       - DB_PASS=linksdbpassword
     ports:
       - 8080:8080
+    healthcheck:
+      test: ["CMD", "curl", "-X", "POST", "http://localhost:8080/health"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     image: mariadb:lts
@@ -22,4 +31,9 @@ services:
       MARIADB_PASSWORD: linksdbpassword
     volumes:
       - ./mariadb-data:/var/lib/mysql
-
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3

@@ -10,5 +10,7 @@ FROM eclipse-temurin:21-jre-alpine AS production
 
 COPY --from=build /app/build/libs/*.jar /app/la.jar
 
+RUN apk add curl
+
 CMD ["java", "-jar", "/app/la.jar"]
 
