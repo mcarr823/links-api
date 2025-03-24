@@ -2,7 +2,7 @@
 
 ## Endpoints
 
-The Links API supports the following primary endpoints:
+The Links API supports the following endpoints:
 
 | Endpoint   | Description                     |
 |------------|---------------------------------|
@@ -12,6 +12,7 @@ The Links API supports the following primary endpoints:
 | /link/all  | Queries all individual links    |
 | /import    | Imports one or more link groups |
 | /export    | Exports all link groups         |
+| /health    | Health check                    |
 
 ## Request formatting
 
@@ -34,6 +35,7 @@ All requests have a content type of "application/json" and follow the below sche
 | /link/all  | &cross;   | &check; | &cross; | &check; |
 | /import    | &check;   | &cross; | &cross; | &cross; |
 | /export    | &cross;   | &check; | &cross; | &cross; |
+| /health    | &cross;   | &check; | &cross; | &cross; |
 
 ## Examples
 
@@ -45,3 +47,4 @@ For more detailed explanations of each endpoint, and examples of the CRUD operat
 - [Links (all)](links/all/README.md)
 - [Import](import/README.md)
 - [Export](export/README.md)
+- [Health](health/README.md)
