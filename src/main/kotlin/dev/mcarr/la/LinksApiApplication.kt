@@ -32,24 +32,5 @@ class LinksApiApplication
  * when it is started. These are currently ignored
  * */
 fun main(args: Array<String>) {
-
-	val dbType = DatabaseManager.getEnv(DatabaseEnvironment.TYPE, DatabaseType.MEMORY.type)
-	val dbHost = DatabaseManager.getEnv(DatabaseEnvironment.HOST, "localhost")
-	val dbPort = DatabaseManager.getEnv(DatabaseEnvironment.PORT)
-	val dbName = DatabaseManager.getEnv(DatabaseEnvironment.NAME)
-	val dbUser = DatabaseManager.getEnv(DatabaseEnvironment.USER, "root")
-	val dbPass = DatabaseManager.getEnv(DatabaseEnvironment.PASS, "")
-	val dbFile = DatabaseManager.getEnv(DatabaseEnvironment.FILE)
-
-	DatabaseManager.connect(
-		dbType = dbType,
-		dbHost = dbHost,
-		dbPort = dbPort,
-		dbName = dbName,
-		dbUser = dbUser,
-		dbPass = dbPass,
-		dbFile = dbFile
-	)
-
 	runApplication<LinksApiApplication>(*args)
 }

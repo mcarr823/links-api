@@ -1,52 +1,93 @@
 package dev.mcarr.la.classes.database
 
-import dev.mcarr.la.data.enums.DatabaseEnvironment
 import dev.mcarr.la.data.enums.DatabaseType
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.TransactionManager
-import java.sql.Connection
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.jdbc.DataSourceBuilder
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
+import javax.sql.DataSource
 
 /**
- * Object for managing the connection to known database formats.
+ * Spring class for managing the database connection.
  *
- * This class translates the arguments passed to it via the
- * server's environment variables and figures out which
- * database it should connect to as a result.
+ * This class interprets environment variables and figures
+ * out which database the server should connect to.
  * */
-object DatabaseManager {
+@Configuration
+@Component
+class DatabaseManager {
 
-    fun getEnv(
-        env: DatabaseEnvironment
-    ): String? {
-        return System.getenv(env.key)
-    }
+    /**
+     * The type of database to connect to.
+     *
+     * This value should match a known DatabaseType.
+     *
+     * @see DatabaseType
+     * */
+    @Value("\${DB_TYPE:MEMORY}")
+    private lateinit var dbType: String
 
-    fun getEnv(
-        env: DatabaseEnvironment,
-        defaultValue: String
-    ): String {
-        return getEnv(env) ?: defaultValue
-    }
+    /**
+     * Server on which the database resides.
+     * */
+    @Value("\${DB_HOST:localhost}")
+    private lateinit var dbHost: String
+
+    /**
+     * Port on which the database is running.
+     *
+     * A default value will be used based on dbType
+     * if a port is not specified.
+     * */
+    @Value("\${DB_PORT:}")
+    private lateinit var dbPort: String
+
+    /**
+     * Name of the database to connect to.
+     *
+     * May be empty if the DBMS doesn't require/support
+     * a database name.
+     * */
+    @Value("\${DB_NAME:}")
+    private lateinit var dbName: String
+
+    /**
+     * Username credential used to connect to the database.
+     *
+     * May be empty if the database doesn't require
+     * authentication
+     * */
+    @Value("\${DB_USER:root}")
+    private lateinit var dbUser: String
+
+    /**
+     * Password credential used to connect to the database.
+     *
+     * May be empty if the database doesn't require
+     * authentication
+     * */
+    @Value("\${DB_PASS:}")
+    private lateinit var dbPass: String
+
+    /**
+     * Location of the database file.
+     *
+     * Only required for SQLite.
+     * */
+    @Value("\${DB_FILE:}")
+    private lateinit var dbFile: String
+
+    /**
+     * Spring bean for managing the database connection.
+     * */
+    @get:Bean
+    val dataSource: DataSource
+        get() = connect()
 
     /**
      * Establishes a connection to a database based on the
-     * arguments passed to this function.
-     *
-     * @param dbType The type of database to connect to. This value
-     * should match a known DatabaseType.
-     * @param dbHost Server on which the database resides
-     * @param dbPort Port on which the database is running. A default
-     * value will be used based on dbType if a port is not specified
-     * @param dbName Name of the database to connect to. Can be null
-     * if the DBMS doesn't require/support a database name
-     * @param dbUser Username credential used to connect to the
-     * database. May be empty if the database doesn't require
-     * authentication
-     * @param dbPass Password credential used to connect to the
-     * database. May be empty if the database doesn't require
-     * authentication
-     * @param dbFile Location of the database file. Only required
-     * for SQLite
+     * environment variables.
      *
      * @throws Exception If the provided database type is not in
      * a known or supported format, or if a required connection
@@ -55,23 +96,17 @@ object DatabaseManager {
      *
      * @see DatabaseType
      * */
-    fun connect(
-        dbType: String,
-        dbHost: String,
-        dbPort: String?,
-        dbName: String?,
-        dbUser: String,
-        dbPass: String,
-        dbFile: String?
-    ) {
-        val type = parseDatabaseType(dbType)
+    private fun connect(): DataSource {
+        val type = parseDatabaseType()
+        val source = DataSourceBuilder.create()
         when(type){
-            DatabaseType.MEMORY -> Database.connect("jdbc:h2:mem:regular", driver = "org.h2.Driver")
-            DatabaseType.MARIADB -> connectMaria(dbHost, dbPort, dbName, dbUser, dbPass)
-            DatabaseType.MYSQL -> connectMySql(dbHost, dbPort, dbName, dbUser, dbPass)
-            DatabaseType.POSTGRES -> connectPostgres(dbHost, dbPort, dbName, dbUser, dbPass)
-            DatabaseType.SQLITE -> connectSqLite(dbFile)
+            DatabaseType.MEMORY -> source.connectMemory()
+            DatabaseType.MARIADB -> source.connectMaria()
+            DatabaseType.MYSQL -> source.connectMySql()
+            DatabaseType.POSTGRES -> source.connectPostgres()
+            DatabaseType.SQLITE -> source.connectSqLite()
         }
+        return source.build()
     }
 
     /**
@@ -83,19 +118,16 @@ object DatabaseManager {
      * So this function will attempt to map the provided database
      * type to a known value in the DatabaseType enum.
      *
-     * @param type String representation of a DatabaseType value
-     *
-     * @return The corresponding value from the DatabaseType enum
+     * @return The matched DatabaseType enum
      *
      * @throws Exception If the provided database type is not in
      * a known or supported format
      *
      * @see DatabaseType
      * */
-    private fun parseDatabaseType(
-        type: String
-    ): DatabaseType {
-        return when(type){
+    private fun parseDatabaseType(): DatabaseType {
+        //println("Database type: $dbType")
+        return when(dbType){
             DatabaseType.MEMORY.type -> DatabaseType.MEMORY
             DatabaseType.MARIADB.type -> DatabaseType.MARIADB
             DatabaseType.MYSQL.type -> DatabaseType.MYSQL
@@ -106,123 +138,80 @@ object DatabaseManager {
     }
 
     /**
-     * Attempts to establish a connection to a MariaDB database.
+     * Attempts to establish a connection to a RAM database.
      *
-     * @param dbHost Server on which the database resides
-     * @param dbPort Port on which the database is running. Defaults
-     * to 3306 if not specified
-     * @param dbName Name of the database to connect to. An
-     * exception will be thrown if this is not provided
-     * @param dbUser Username credential used to connect to the
-     * database
-     * @param dbPass Password credential used to connect to the
-     * database
+     * This should never fail, and should only really be used for
+     * testing purposes, since it doesn't persist data.
+     * */
+    private fun DataSourceBuilder<*>.connectMemory(){
+        driverClassName("org.h2.Driver")
+        url("jdbc:h2:mem:regular")
+    }
+
+    /**
+     * Attempts to establish a connection to a MariaDB database.
      *
      * @throws Exception If a required connection parameter has
      * not been provided, or if the database connection is
      * unsuccessful for some reason
      * */
-    private fun connectMaria(
-        dbHost: String,
-        dbPort: String?,
-        dbName: String?,
-        dbUser: String,
-        dbPass: String
-    ){
-        val port = dbPort ?: "3306"
-        val name = dbName ?: throw Exception("Database name not specified")
-        Database.connect(
-            url = "jdbc:mariadb://$dbHost:$port/$name",
-            driver = "org.mariadb.jdbc.Driver",
-            user = dbUser,
-            password = dbPass
-        )
+    private fun DataSourceBuilder<*>.connectMaria(){
+        val port = dbPort.toIntOrNull() ?: "3306"
+        val name = dbName.takeIf { it.isNotEmpty() } ?: throw Exception("Database name not specified")
+
+        driverClassName("org.mariadb.jdbc.Driver")
+        url("jdbc:mariadb://$dbHost:$port/$name")
+        username(dbUser)
+        password(dbPass)
     }
 
     /**
      * Attempts to establish a connection to a MySQL database.
      *
-     * @param dbHost Server on which the database resides
-     * @param dbPort Port on which the database is running. Defaults
-     * to 3306 if not specified
-     * @param dbName Name of the database to connect to. An
-     * exception will be thrown if this is not provided
-     * @param dbUser Username credential used to connect to the
-     * database
-     * @param dbPass Password credential used to connect to the
-     * database
-     *
      * @throws Exception If a required connection parameter has
      * not been provided, or if the database connection is
      * unsuccessful for some reason
      * */
-    private fun connectMySql(
-        dbHost: String,
-        dbPort: String?,
-        dbName: String?,
-        dbUser: String,
-        dbPass: String
-    ){
-        val port = dbPort ?: "3306"
-        val name = dbName ?: throw Exception("Database name not specified")
-        Database.connect(
-            "jdbc:mysql://$dbHost:$port/$name",
-            driver = "com.mysql.cj.jdbc.Driver",
-            user = dbUser,
-            password = dbPass
-        )
+    private fun DataSourceBuilder<*>.connectMySql(){
+        val port = dbPort.toIntOrNull() ?: "3306"
+        val name = dbName.takeIf { it.isNotEmpty() } ?: throw Exception("Database name not specified")
+
+        driverClassName("com.mysql.cj.jdbc.Driver")
+        url("jdbc:mysql://$dbHost:$port/$name")
+        username(dbUser)
+        password(dbPass)
     }
 
     /**
      * Attempts to establish a connection to a Postgres database.
      *
-     * @param dbHost Server on which the database resides
-     * @param dbPort Port on which the database is running. Defaults
-     * to 12346 if not specified
-     * @param dbName Name of the database to connect to. An
-     * exception will be thrown if this is not provided
-     * @param dbUser Username credential used to connect to the
-     * database
-     * @param dbPass Password credential used to connect to the
-     * database
-     *
      * @throws Exception If a required connection parameter has
      * not been provided, or if the database connection is
      * unsuccessful for some reason
      * */
-    private fun connectPostgres(
-        dbHost: String,
-        dbPort: String?,
-        dbName: String?,
-        dbUser: String,
-        dbPass: String
-    ){
-        val port = dbPort ?: "12346"
-        val name = dbName ?: throw Exception("Database name not specified")
-        Database.connect(
-            "jdbc:postgresql://$dbHost:$port/$name",
-            driver = "org.postgresql.Driver",
-            user = dbUser,
-            password = dbPass
-        )
+    private fun DataSourceBuilder<*>.connectPostgres(){
+        val port = dbPort.toIntOrNull() ?: "12346"
+        val name = dbName.takeIf { it.isNotEmpty() } ?: throw Exception("Database name not specified")
+
+        driverClassName("org.postgresql.Driver")
+        url("jdbc:postgresql://$dbHost:$port/$name")
+        username(dbUser)
+        password(dbPass)
     }
 
     /**
      * Attempts to establish a connection to a SQLite database.
      *
-     * @param dbFile Location of the database file. An
-     * exception will be thrown if this is not provided
-     *
      * @throws Exception If a required connection parameter has
      * not been provided, or if the database connection is
      * unsuccessful for some reason
      * */
-    private fun connectSqLite(
-        filepath: String?
-    ){
-        val fp = filepath ?: throw Exception("SQLite DB file not specified")
-        Database.connect("jdbc:sqlite:$fp", "org.sqlite.JDBC")
-        TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
+    private fun DataSourceBuilder<*>.connectSqLite(){
+        val fp = dbFile.takeIf { it.isNotEmpty() } ?: throw Exception("SQLite DB file not specified")
+        //TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
+
+        driverClassName("org.sqlite.JDBC")
+        url("jdbc:sqlite:$fp")
     }
 
 }
