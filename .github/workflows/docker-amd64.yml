@@ -2,7 +2,7 @@ name: Docker Image amd64
 
 on:
   push:
-    branches: [ "docker-workflow" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
