@@ -1,5 +1,8 @@
 # links-api
 
+[![Docker Image amd64](https://github.com/mcarr823/links-api/actions/workflows/docker-amd64.yml/badge.svg)](https://github.com/mcarr823/links-api/actions/workflows/docker-amd64.yml)
+[![Docker Image arm64](https://github.com/mcarr823/links-api/actions/workflows/docker-aarch64.yml/badge.svg)](https://github.com/mcarr823/links-api/actions/workflows/docker-aarch64.yml)
+
 links-api is the API interface for performing CRUD operations on the Links database.
 
 API requests are performed via HTTP(S) requests to a REST interface.
